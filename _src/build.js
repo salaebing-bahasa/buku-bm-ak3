@@ -360,8 +360,8 @@ function indexPage(words) {
   ${ORN}
   <ul class="bul prose guru">
     ${[
-      ["Butang pembesar suara menggunakan suara bahasa Melayu pada peranti (sistem baca teks telefon atau komputer). Jika peranti tiada suara bahasa Melayu, sistem akan menggunakan suara bahasa Indonesia. Guru digalakkan menyebut perkataan untuk murid, dan menggunakan butang ini untuk ulang kaji.",
-       "ปุ่มลำโพงใช้เสียงอ่านภาษามลายูของเครื่อง (ระบบอ่านออกเสียงของโทรศัพท์หรือคอมพิวเตอร์) ถ้าเครื่องไม่มีเสียงภาษามลายู ระบบจะใช้เสียงภาษาอินโดนีเซียแทน ครูควรออกเสียงให้นักเรียนฟังเป็นหลัก และใช้ปุ่มนี้เพื่อทบทวน"],
+      ["Butang pembesar suara menggunakan suara bahasa Melayu pada peranti (sistem baca teks telefon atau komputer). Hanya suara bahasa Melayu digunakan; jika peranti tiada suara bahasa Melayu, butang ini disembunyikan dan panduan dipaparkan (pelayar Microsoft Edge atau telefon Android dengan suara Bahasa Melayu (Malaysia) boleh digunakan). Guru digalakkan menyebut perkataan untuk murid, dan menggunakan butang ini untuk ulang kaji.",
+       "ปุ่มลำโพงใช้เสียงอ่านภาษามลายูของเครื่อง (ระบบอ่านออกเสียงของโทรศัพท์หรือคอมพิวเตอร์) ใช้เฉพาะเสียงภาษามลายูเท่านั้น ถ้าเครื่องไม่มีเสียงภาษามลายู ปุ่มนี้จะถูกซ่อนและมีคำแนะนำขึ้นมา (ใช้เบราว์เซอร์ Microsoft Edge หรือโทรศัพท์ Android ที่ติดตั้งเสียงภาษามลายู (มาเลเซีย) ได้) ครูควรออกเสียงให้นักเรียนฟังเป็นหลัก และใช้ปุ่มนี้เพื่อทบทวน"],
       ["Setiap latihan dalam laman web ini sama dengan buku (fail Word). Butang “Lihat jawapan” di bawah setiap soalan digunakan untuk menyemak jawapan selepas selesai menjawab.",
        "แบบฝึกหัดในเว็บไซต์ตรงกับหนังสือเล่ม (ไฟล์ Word) ทุกข้อ ปุ่ม “ดูเฉลย” ใต้แต่ละข้อใช้ตรวจคำตอบหลังทำเสร็จแล้ว"],
       ["“Kuiz Kendiri” dan “Kad Imbas” di akhir pelajaran dipilih secara rawak daripada perkataan pelajaran itu, sesuai untuk ulang kaji di rumah.",

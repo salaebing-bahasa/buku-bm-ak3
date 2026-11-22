@@ -417,3 +417,8 @@ td.ms .pic { vertical-align: middle; margin-right: .45rem; }
 .fig img{max-width:100%;height:auto;border-radius:10px;border:1px solid var(--line, #d9e2dc);background:#fff}
 .fig figcaption{font-size:.92rem;color:var(--muted, #55605A);margin-top:.4rem}
 @media print{.fig img{max-width:16cm}}
+
+/* คำแนะนำเมื่อเครื่องไม่มีเสียงภาษามลายู */
+.voice-note{max-width:60rem;margin:1rem auto}
+.voice-note .btn-ghost{margin-top:.4rem}
+@media print{.voice-note{display:none}}

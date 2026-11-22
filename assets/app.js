@@ -3,26 +3,65 @@
   "use strict";
 
   // ---------- เสียงอ่าน (ใช้ระบบอ่านออกเสียงของเครื่อง) ----------
+  // ใช้เฉพาะเสียงภาษามลายู (ms) เท่านั้น ไม่ใช้เสียงภาษาอินโดนีเซียแทน
+  // ถ้าเครื่องไม่มีเสียงภาษามลายู จะซ่อนปุ่มลำโพงและแสดงคำแนะนำ
   var synth = window.speechSynthesis;
   var voice = null;
+  var checked = false;
+  function rank(v) {
+    var s = 0;
+    if (/^ms[-_]MY/i.test(v.lang)) s += 4;
+    if (/natural|online|neural/i.test(v.name)) s += 2;
+    if (/google/i.test(v.name)) s += 1;
+    return s;
+  }
   function pickVoice() {
     if (!synth) return;
-    var vs = synth.getVoices();
-    voice = vs.find(function (v) { return /^ms/i.test(v.lang); }) ||
-            vs.find(function (v) { return /^id/i.test(v.lang); }) || null;
+    var vs = synth.getVoices().filter(function (v) { return /^ms([-_]|$)/i.test(v.lang); });
+    vs.sort(function (a, b) { return rank(b) - rank(a); });
+    voice = vs[0] || null;
+    if (voice) {
+      document.documentElement.classList.remove("no-voice");
+      var n = document.getElementById("voice-note");
+      if (n) n.remove();
+    }
+  }
+  function noVoiceNote() {
+    if (voice || checked) return;
+    checked = true;
+    document.documentElement.classList.add("no-voice");
+    if (!document.querySelector("[data-say]")) return;
+    try { if (localStorage.getItem("voice-note-closed") === "1") return; } catch (e) {}
+    var box = document.createElement("aside");
+    box.id = "voice-note";
+    box.className = "box note voice-note";
+    box.innerHTML = '<p class="box-t"><span class="bi"><span lang="ms">Suara bahasa Melayu tidak ditemui</span><span class="tr">ไม่พบเสียงภาษามลายูในเครื่องนี้</span></span></p>' +
+      '<p lang="ms">Butang pembesar suara disembunyikan kerana peranti ini tidak mempunyai suara bahasa Melayu. Untuk mendengar sebutan, buka laman ini dengan pelayar Microsoft Edge, atau pasang suara Bahasa Melayu (Malaysia) dalam tetapan teks ke pertuturan pada telefon Android.</p>' +
+      '<p class="tr">ปุ่มฟังเสียงถูกซ่อนไว้ เพราะเครื่องนี้ไม่มีเสียงภาษามลายู ถ้าต้องการฟังเสียง ให้เปิดเว็บนี้ด้วยเบราว์เซอร์ Microsoft Edge หรือติดตั้งเสียงภาษามลายู (มาเลเซีย) ในการตั้งค่าแปลงข้อความเป็นเสียงของโทรศัพท์ Android</p>' +
+      '<button type="button" class="btn-ghost" id="voice-note-x"><span class="bi"><span lang="ms">Tutup</span><span class="tr">ปิด</span></span></button>';
+    var main = document.getElementById("isi");
+    if (main) main.insertBefore(box, main.firstChild);
+    document.getElementById("voice-note-x").addEventListener("click", function () {
+      box.remove();
+      try { localStorage.setItem("voice-note-closed", "1"); } catch (e) {}
+    });
   }
   if (!synth || typeof SpeechSynthesisUtterance === "undefined") {
     document.documentElement.classList.add("no-voice");
   } else {
     pickVoice();
-    synth.onvoiceschanged = pickVoice;
+    if (synth.addEventListener) synth.addEventListener("voiceschanged", pickVoice); else synth.onvoiceschanged = pickVoice;
+    // รายชื่อเสียงบางเบราว์เซอร์โหลดช้า รอสักครู่ก่อนสรุปว่าไม่มีเสียงภาษามลายู
+    setTimeout(function () { pickVoice(); noVoiceNote(); }, 2000);
   }
   function say(text, el) {
     if (!synth || !text) return;
+    if (!voice) pickVoice();
+    if (!voice) { noVoiceNote(); return; } // ไม่มีเสียงภาษามลายู ไม่อ่านด้วยเสียงภาษาอื่น
     synth.cancel();
     var u = new SpeechSynthesisUtterance(text);
-    u.lang = voice ? voice.lang : "ms-MY";
-    if (voice) u.voice = voice;
+    u.lang = voice.lang;
+    u.voice = voice;
     u.rate = 0.85;
     if (el) {
       el.classList.add("on");
