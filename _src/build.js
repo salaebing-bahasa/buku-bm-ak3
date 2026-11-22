@@ -112,7 +112,12 @@ function renderBlock(b) {
       return `<article class="reading">${b.title ? `<h4>${md(b.title)}</h4>` : ""}${b.paras.map((p) => `<p>${md(p)}</p>`).join("")}<button type="button" class="btn-ghost say-long" data-say="${esc(all)}">${SPEAK_ICON}<span>${bi("Dengar semua", "ฟังทั้งเรื่อง")}</span></button></article>`;
     }
     case "pantun": return `<blockquote class="pantun">${b.lines.map((l, i) => `${md(l)}${(i + 1) % 4 === 0 && i < b.lines.length - 1 ? "</blockquote><blockquote class=\"pantun\">" : "<br>"}`).join("")}</blockquote>`;
-    case "poem": return b.stanzas.map((st) => `<blockquote class="pantun">${st.map(md).join("<br>")}</blockquote>`).join("");
+    case "poem": {
+      // ปุ่มฟังเสียงท้ายแต่ละบท และปุ่ม "ฟังทั้งบท" ท้ายกลอน
+      const all = b.stanzas.map((st) => st.map(plain).join(" ")).join(" ");
+      const verses = b.stanzas.map((st, i) => `<blockquote class="pantun">${st.map(md).join("<br>")} ${speakBtn(st.map(plain).join(" "), `rangkap ${i + 1}`)}</blockquote>`).join("");
+      return `<div class="poem">${verses}<button type="button" class="btn-ghost say-long" data-say="${esc(all)}">${SPEAK_ICON}<span>${bi("Dengar semua", "ฟังทั้งบท")}</span></button></div>`;
+    }
     case "image": return `<figure class="fig"><img src="../${b.src}" alt="${esc(plain(msPart(b.alt || "")))}" width="${b.w || 1200}" height="${b.h || 800}" loading="lazy" decoding="async">${b.caption ? `<figcaption>${md(b.caption)}</figcaption>` : ""}</figure>`;
     case "note": return `<aside class="box note"><p class="box-t">${(b.title ? split2(b.title, bi) : bi("Catatan", "หมายเหตุ"))}</p>${b.lines.map((l) => `<p>${md(l)}</p>`).join("")}</aside>`;
     case "pattern": return `<aside class="box pattern"><p class="box-t">${split2(b.title || "Pola ayat  รูปประโยค", bi)}</p>${b.lines.map((l) => `<p>${md(l)}</p>`).join("")}</aside>`;
